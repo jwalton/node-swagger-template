@@ -1,11 +1,17 @@
+import path from 'path';
+
 import express from 'express';
 import pb from 'promise-breaker';
+import {absolutePath as pathToSwaggerUi} from 'swagger-ui-dist';
 
 import swaggerNodeRunner from 'swagger-node-runner';
 import swaggerConfig from './swagger/config';
 
 export async function makeServer() {
     const app = express();
+
+    app.use(express.static(path.resolve(__dirname, '../static')));
+    app.use('/api/v1', express.static(pathToSwaggerUi()));
 
     // Stop swaggerNodeRunner from complaining about the lack of a config file.
     process.env.SUPPRESS_NO_CONFIG_WARNING = 'true';

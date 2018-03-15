@@ -28,7 +28,8 @@
     "babel-polyfill": "^6.26.0",
     "express": "^4.16.3",
     "promise-breaker": "^4.1.4",
-    "swagger-node-runner": "^0.7.1"
+    "swagger-node-runner": "^0.7.1",
+    "swagger-ui-dist": "^3.12.1"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
