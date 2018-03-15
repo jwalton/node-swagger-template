@@ -1,3 +1,4 @@
+import {expect} from 'chai';
 import request from 'supertest';
 
 import {makeServer} from '../src/server';
@@ -18,6 +19,20 @@ describe('api /user tests', function() {
             id: USER_ID,
             username: 'jwalton'
         });
+    });
+
+    it('should not GET a user with an invalid ID', async function() {
+        const response = await request(this.app)
+        .get(`/api/v1/user?id=foo`)
+        .set('Accept', 'application/json')
+        .expect('Content-Type', /json/)
+        .expect(400);
+
+        expect(response.body.message).to.equal('Validation errors');
+        expect(response.body.errors[0].message)
+            .to.equal("Invalid parameter (id): Value failed JSON Schema validation");
+        expect(response.body.errors[0].errors[0].message)
+            .to.equal("Object didn't pass validation for format ObjectId: foo");
     });
 
 });

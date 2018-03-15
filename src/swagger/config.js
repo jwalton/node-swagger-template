@@ -30,6 +30,7 @@ const config = {
             {onError: 'json_error_handler'},
             'cors',
             'swagger_params_parser',
+            'custom_validators', // Custom fitting, found in /src/swagger/fittings/custom_validators.js
             'swagger_security',
             '_swagger_validate',
             'express_compatibility',
