@@ -1,0 +1,38 @@
+{
+  "name": "swagger-template",
+  "version": "1.0.0",
+  "description": "Template project for building Swagger APIs on Node.js",
+  "main": "lib/index.js",
+  "scripts": {
+    "build": "babel -s -d lib src --copy-files",
+    "test": "npm run test:lint",
+    "test:lint": "eslint src",
+    "start": "npm run build && node ./lib/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jwalton/node-swagger-template.git"
+  },
+  "keywords": [
+    "swagger",
+    "babel",
+    "OpenAPI"
+  ],
+  "author": "Jason Walton",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jwalton/node-swagger-template/issues"
+  },
+  "homepage": "https://github.com/jwalton/node-swagger-template#readme",
+  "dependencies": {
+    "express": "^4.16.3"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "eslint": "^4.18.2",
+    "eslint-config-benbria": "^3.0.2",
+    "eslint-plugin-import": "^2.9.0",
+    "eslint-plugin-promise": "^3.7.0"
+  }
+}
