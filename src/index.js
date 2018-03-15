@@ -1,17 +1,16 @@
 /* eslint "no-console": off */
-import express from 'express';
 
-export const app = express();
+import 'babel-polyfill';
+import {makeServer} from './server';
 
-function startServer() {
+makeServer()
+.then(app => {
     const port = process.env.PORT || 10010;
-
-    app.use('/', (req, res) => {
-        res.send('Hello world');
-    });
-
     app.listen(port);
     console.log(`Listening on port ${port}`);
-}
+})
+.catch(err => {
+    console.error(err.stack);
+    process.exit(1);
+});
 
-startServer();

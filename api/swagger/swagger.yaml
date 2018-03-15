@@ -1,0 +1,90 @@
+swagger: "2.0"
+info:
+  version: "1.0.0"
+  title: node-swagger-template
+# during dev, should point to your local machine
+host: localhost:10010
+# basePath prefixes all resource paths
+basePath: /api/v1
+#
+schemes:
+  # tip: remove http to make production-grade
+  - http
+  - https
+# format of bodies a client can send (Content-Type)
+consumes:
+  - application/json
+# format of the responses to the client (Accepts)
+produces:
+  - application/json
+paths:
+  # /api/v1/user
+  /user:
+    # This will be handled by src/api/controllers/user.js
+    x-swagger-router-controller: user
+    get:
+      description: Gets a User.
+      # This will be handled by the `getUser()` funciton in src/api/controllers/user.js.
+      operationId: getUser
+      parameters:
+        - name: id
+          in: query
+          description: The ID of the user to get.
+          required: true
+          type: string
+          format: ObjectId
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/User"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+    post:
+      description: Creates a new user or updates an existing user.
+      # This will be handled by the `getUser()` funciton in src/api/controllers/user.js.
+      operationId: putUser
+      parameters:
+        - name: body
+          in: body
+          description: The new User object.
+          required: true
+          schema:
+            $ref: "#/definitions/User"
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/User"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  # This makes it so you can get the swagger file from /api/v1/swagger.
+  /swagger:
+    x-swagger-pipe: swagger_raw
+
+# complex objects have schema definitions
+definitions:
+  User:
+    required:
+      - id
+      - username
+    properties:
+      id:
+        type: string
+        format: ObjectId
+      username:
+        type: string
+  ErrorResponse:
+    required:
+      - message
+    properties:
+      message:
+        type: string
