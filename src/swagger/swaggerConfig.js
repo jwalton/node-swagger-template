@@ -1,4 +1,7 @@
 import * as path from 'path';
+import sway from 'sway';
+
+const SWAGGER_FILE = path.resolve(__dirname, '../../api/swagger/swagger.yaml');
 
 const config = {
     // When running tests, we use `babel-register` so we can run tests directly from
@@ -42,4 +45,18 @@ const config = {
     }
 };
 
-export default config;
+async function loadSwaggerDefinition() {
+    // Use `sway` to load the swagger file instead of `yaml-js` or something
+    // similar, because OpenAPI documents can be split across multiple files,,
+    // and this will merge all the files together for us.
+    const swagger = await sway.create({definition: SWAGGER_FILE});
+    const definition = swagger.definitionRemotesResolved;
+
+    return definition;
+}
+
+export default async function getConfig() {
+    return Object.assign(config, {
+        swagger: await loadSwaggerDefinition()
+    });
+}

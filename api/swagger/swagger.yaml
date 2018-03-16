@@ -2,7 +2,8 @@ swagger: "2.0"
 info:
   version: "1.0.0"
   title: node-swagger-template
-# during dev, should point to your local machine
+# during dev, should point to your local machine.
+# Note this field is optional.
 host: localhost:10010
 # basePath prefixes all resource paths
 basePath: /api/v1

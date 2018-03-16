@@ -5,18 +5,20 @@ import pb from 'promise-breaker';
 import {absolutePath as pathToSwaggerUi} from 'swagger-ui-dist';
 
 import swaggerNodeRunner from 'swagger-node-runner';
-import swaggerConfig from './swagger/config';
+import createSwaggerConfig from './swagger/swaggerConfig';
 
-export async function makeServer() {
-    const app = express();
+const PRODUCTION_HOST = 'myproductionserver.com';
 
-    app.use(express.static(path.resolve(__dirname, '../static')));
-    app.use('/api/v1', express.static(pathToSwaggerUi()));
-
+async function createSwaggerMiddleware(app) {
     // Stop swaggerNodeRunner from complaining about the lack of a config file.
     process.env.SUPPRESS_NO_CONFIG_WARNING = 'true';
 
     // Create a swagger middleware
+    const swaggerConfig = await createSwaggerConfig();
+    if(process.env.NODE_ENV === 'production') {
+        swaggerConfig.swagger.host = PRODUCTION_HOST;
+        swaggerConfig.swagger.schemes = ['https'];
+    }
     const swaggerRunner = await pb.call(done =>
         swaggerNodeRunner.create(swaggerConfig, done)
     );
@@ -36,6 +38,15 @@ export async function makeServer() {
             next();
         }
     });
+}
+
+export async function makeServer() {
+    const app = express();
+
+    app.use(express.static(path.resolve(__dirname, '../static')));
+    app.use('/api/v1', express.static(pathToSwaggerUi()));
+
+    await createSwaggerMiddleware(app);
 
     app.use('/', (req, res) => {
         res.send('Hello world');
